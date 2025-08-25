@@ -1,9 +1,20 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
 variable "ami" {
-  description = "This is AMI for the instance"
+  description = "value"
 }
 
 variable "instance_type" {
-  description = "This is the instance type, for example: t2.micro"
+  description = "value"
+  type = map(string)
+
+  default = {
+    "dev" = "t2.micro"
+    "stage" = "t3.medium"
+    "prod" = "t2.micro"
+  }
 }
 
 variable "subnet_id" {
@@ -13,10 +24,11 @@ variable "subnet_id" {
 
 
 
-resource "aws_instance" "example" {
-    ami = var.ami
-    instance_type = var.instance_type
-    subnet_id     = var.subnet_id   # required because no default VPC
 
-
+module "ec2_instance" {
+  source = "./modules/ec2_instance"
+  ami = var.ami
+  instance_type = lookup(var.instance_type, terraform.workspace, "t2.micro")
+  subnet_id         = var.subnet_id
+  
 }
