@@ -63,7 +63,7 @@ resource "aws_security_group" "my_sg" {
 # Key Pair (use existing key or import your own)
 resource "aws_key_pair" "my_key" {
   key_name   = "my-key"
-  public_key = file("~/.ssh/my-key.pub")   # update path if needed
+  public_key = file("~/.ssh/id_rsa.pub")   # update path if needed
 }
 
 # Jump Server
